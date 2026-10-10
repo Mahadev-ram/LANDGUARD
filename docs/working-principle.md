@@ -1,69 +1,33 @@
 # Working principle
 
-## Overview
+## Data acquisition
 
-LANDGUARD is designed around a basic concept: measure a few environmental and motion-related indicators and interpret them as possible warning signals for unstable ground conditions. The system is intended to collect sensor data, process it locally, and present a simple status on a display with optional visual or audible alerts.
+The integrated sketch reads analog values from the soil-moisture input (GPIO34) and rain input (GPIO35). It requests MPU6050 acceleration data over I²C, using SDA GPIO21 and SCL GPIO22. These pin assignments are the sketch's current assumptions and must be checked against actual wiring.
 
-This description reflects the prototype concept and not a validated field algorithm.
+## Tilt and motion estimate
 
-## Sensor roles
+The sketch calculates roll and pitch from accelerometer axes and stores a baseline during startup. It also calculates a smoothed acceleration-change magnitude as a rough motion/vibration proxy. This is not a calibrated vibration or seismic measurement, and motion/tilt thresholds are provisional.
 
-### Soil moisture monitoring
-Soil moisture is a useful environmental indicator because high saturation can increase the likelihood of slope instability or movement when combined with other conditions. The soil moisture sensor is meant to provide data about relative moisture levels.
+A separate digital vibration sensor is included in the project concept but is not currently read by the integrated sketch.
 
-This can help indicate whether the ground is unusually wet or approaching susceptibility conditions, but actual threshold selection still requires testing and calibration.
+## Current risk and alert behavior
 
-### Rainfall monitoring
-The rain sensor contributes to rainfall-related measurement. Rainfall is relevant because prolonged or intense rain can alter the soil condition and increase the risk of slope failure.
+The integrated code uses three simplified levels:
 
-The project concept uses rainfall as one of the environmental indicators in the overall risk assessment.
+- **SAFE:** LED off and buzzer off.
+- **WARNING:** LED on and intermittent short active-buzzer chirps.
+- **DANGER:** LED on and faster repeated buzzer pulses.
 
-### Vibration monitoring
-The vibration sensor is intended to detect sudden movement or vibration events. Such signals can be associated with changes in terrain stability or sudden disturbances near the installation site.
+Risk classification uses provisional moisture, rain, tilt and acceleration-change thresholds. Those thresholds must be determined from actual repeated tests. The code does not implement the report's four states (SAFE/WATCH/WARNING/CRITICAL) exactly.
 
-The final integration and interpretation logic for vibration data remain under development.
+## Display and diagnostics
 
-### Motion and tilt monitoring
-The MPU6050 is used for motion-related measurements, including acceleration and orientation. The device can help estimate whether the monitored structure or ground is experiencing tilt, displacement, or sudden acceleration changes.
+The OLED displays status, raw analog readings, estimated moisture percentage, tilt change, and the acceleration-change metric. The Serial Monitor reports readings and the simplified risk state for inspection.
 
-This is one of the more important sensing components for understanding vibration and destabilization patterns.
+## Verification boundary
 
-## Prototype alert logic
+A written algorithm does not prove that the physical device behaves as intended. Confirm the OLED and MPU6050 on the shared bus, check analog response, test LED/buzzer outputs independently, and compare the pin map to the assembled circuit before trying integrated operation.
 
-The alert concept is simple:
-- read sensors
-- compare values to configured thresholds
-- display the status
-- trigger warnings when conditions appear abnormal
+See [hardware tests](../tests/README.md), [wiring and calibration](../hardware/WIRING.md), and [test status](testing-results.md).
 
-The exact threshold logic is not yet confirmed and should not be treated as final. The firmware remains pending until the hardware is validated as a complete system.
-
-## Display behavior
-
-The OLED display is intended to show:
-- current sensor values
-- a system status indicator
-- warning or alarm states
-- basic operational diagnostics
-
-This display acts as a simple user interface for the early prototype stage.
-
-## Audio and visual signals
-
-The buzzer and LEDs are intended to provide:
-- visual warning indicator
-- audible signal for abnormal conditions
-- clear feedback for testing and demonstration
-
-These alerts are part of the early prototype concept and are not validated as formal early-warning outputs.
-
-## Important caution
-
-This project uses a practical, educational prototype approach rather than a certified, field-worthy warning system. Sensor readings and alert logic cannot be treated as proven operational thresholds without calibration, integration testing, and safe field validation.
-
-## Related documents
-
-- [Project overview](project-overview.md)
-- [Hardware components](components.md)
-- [Wiring and circuit notes](wiring-and-circuit.md)
-- [Testing status and results](testing-results.md)
+LANDGUARD is an educational prototype and must not be used as a real-world landslide warning system.

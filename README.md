@@ -19,7 +19,7 @@
 
 | File | Purpose |
 |---|---|
-| [Integrated sketch](src/landguard_full/landguard_full.ino) | OLED + MPU6050 + soil/rain AO + LED + active buzzer |
+| [Integrated sketch](src/landguard_full/landguard_full.ino) | OLED + MPU6050 + soil/rain AO + vibration DO + LED/buzzer logic |
 | [MPU6050 test](tests/01_mpu6050_test/mpu6050_test.ino) | Check MPU initialization and accelerometer readings |
 | [MPU6050 + OLED test](tests/02_mpu6050_oled/mpu6050_oled.ino) | Test readings on the SH1106 display |
 | [Soil/rain raw-read test](tests/03_mpu_soil_rain_oled/mpu_soil_rain_oled.ino) | Inspect analog readings with OLED/MPU present |
@@ -45,7 +45,6 @@ Each `.ino` file is a separate Arduino sketch. Start with the individual tests i
 | Rain sensor analog output | GPIO35 |
 | Digital vibration output | GPIO27 (active-low assumption) |
 | Status LED | GPIO18 through a series resistor (e.g. 220–330 Ω) |
-| Active buzzer signal | GPIO25 |
 | Active buzzer/driver signal | GPIO25 (provisional) |
 
 **Verify the table against your actual wiring before powering or uploading.** GPIO34/35 and GPIO27/18/25 are provisional; compare them with actual wiring before using the sketch. All grounds must be common; ESP32 GPIO/ADC inputs must not receive signals above 3.3 V. Use a driver if the buzzer current exceeds safe GPIO output limits.

@@ -1,27 +1,40 @@
 # LANDGUARD wiring and calibration
 
-The diagram [LANDGUARD-provisional-wiring.svg](LANDGUARD-provisional-wiring.svg) is a provisional reference, not a verified netlist of the photographed build. Compare it with actual module labels and wiring before powering.
+**This is a provisional pin reference, not a verified netlist of the photographed circuit.** Confirm each assignment and module pin label against the assembled build before powering.
 
-| Component | ESP32 connection in supplied sketch | Notes |
+## Pin reference used by the integrated sketch
+
+| Component / signal | ESP32 connection | Notes |
 |---|---|---|
-| SH1106 OLED | SDA GPIO21, SCL GPIO22 | I2C; constructor uses SCL 22, SDA 21 |
-| MPU6050 | SDA GPIO21, SCL GPIO22 | Sketch expects address 0x68 |
-| Soil moisture module | AO GPIO34 | Analog output must remain within ADC voltage limits |
-| Rain module | AO GPIO35 | Direction/threshold must be calibrated |
-| LED | GPIO26 through 220 ohm series resistor | Confirm polarity; do not omit resistor |
-| Active buzzer module | Signal GPIO25 | Use transistor/driver if current exceeds GPIO capability |
-| Vibration module | Not assigned in integrated sketch | Confirm module and wiring before adding a pin |
+| SH1106 OLED SDA | GPIO21 | Intended I2C connection |
+| SH1106 OLED SCL | GPIO22 | Shared bus with MPU6050 |
+| MPU6050 SDA/SCL | GPIO21 / GPIO22 | Sketch expects address 0x68 |
+| Soil moisture AO | GPIO34 | Provisional ADC input |
+| Soil moisture DO | Not read | Earlier notes associate GPIO26 with this signal; confirm it against actual wiring |
+| Rain module AO | GPIO35 | Provisional ADC input |
+| Digital vibration output | GPIO27 | Active-low with INPUT_PULLUP by default; change polarity if needed |
+| Status LED | GPIO18 through 220–330 ohm series resistor | Provisional assignment |
+| Active buzzer / driver signal | GPIO25 | Provisional assignment; use driver if required |
 
-All grounds must be common. Power each module according to its specifications. ESP32 GPIOs are not 5 V tolerant; never apply 5 V to GPIO or ADC pins.
+GPIO26 is deliberately not assigned to the LED in the current sketch because earlier project notes associate it with the soil sensor's digital output. All grounds must be common. ESP32 GPIO/ADC pins must not receive signals above 3.3 V.
 
-## Calibration
+## Power and output safety
 
-SOIL_DRY_RAW, SOIL_WET_RAW, RAIN_WET_RAW, RAIN_RAW_LOWER_WHEN_WET, tilt thresholds, and acceleration-change thresholds are demonstration values. Record repeated dry/wet and orientation readings, then tune these constants. The derived moisture percentage is an estimate, not a calibrated volumetric water-content measurement. The MPU6050 acceleration-change metric is not a calibrated seismic measurement.
+- Follow each module's rated supply voltage.
+- Disconnect power before changing wiring.
+- Use a 220–330 ohm series resistor for a discrete LED.
+- Use a transistor/driver if buzzer current exceeds safe GPIO capability.
+- The output test assumes active-high LED and active buzzer; passive piezo buzzers may require tone/PWM.
 
-## Alarm behaviour
+## Calibration constants
 
-- SAFE: LED off, buzzer off.
-- WARNING: LED on, brief buzzer chirp at intervals.
-- DANGER: LED on, faster repeated buzzer alarm.
+SOIL_DRY_RAW, SOIL_WET_RAW, RAIN_WET_RAW, RAIN_RAW_LOWER_WHEN_WET, moisture thresholds, tilt thresholds, motion thresholds, and vibration polarity are demonstration assumptions. Record repeated readings in known dry/wet conditions and with controlled tilt/motion, then adjust. Calculated moisture percentage is relative, not calibrated volumetric water content.
 
-The sketch implements three simplified internal levels (SAFE/WARNING/DANGER), not the report's four-level SAFE/WATCH/WARNING/CRITICAL scheme. Thresholds and alarm response are not field-validated. This is an educational prototype and must not be used for real-world hazard decisions.
+## Four-state alert behavior
+
+- SAFE: LED and buzzer off.
+- WATCH: slow LED pulse; buzzer off.
+- WARNING: steady LED with periodic short chirp.
+- CRITICAL: faster repeated LED flashes and buzzer pulses.
+
+This is prototype logic, not a validated geotechnical risk model. The supplied photo/video document the bench/model build but do not prove every feature was tested.

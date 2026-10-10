@@ -1,84 +1,36 @@
 # Hardware components
 
-This page lists the known components used in the current LANDGUARD prototype and describes their intended role. The hardware setup is still evolving, and final pin assignments for all sensors remain pending.
+LANDGUARD is a bench/model-scale educational prototype built around an ESP32. This page distinguishes the intended hardware role from what the current sketch actually implements.
 
-## Core controller
+## Hardware
 
-### ESP32
-The ESP32 is the main microcontroller for the prototype. It is intended to:
-- collect sensor data
-- process readings
-- manage display output
-- control alert behavior
-- support future data logging or communication features
+- ESP32 development board
+- SH1106 128×64 OLED
+- MPU6050 accelerometer/gyroscope module
+- Analog soil-moisture module
+- Analog rain sensor module
+- LED and active buzzer
+- A separate digital vibration module appears in the project concept/prototype, but it is not currently read by the integrated sketch.
+- Breadboard, jumper wires, and slope-model materials
 
-The ESP32 is the central processing unit for the project.
+## Current code coverage
 
-## Display
+| Component | Current sketch coverage | Important limitation |
+|---|---|---|
+| SH1106 OLED | Yes | Combined I²C operation still needs physical confirmation |
+| MPU6050 | Yes | Tilt and acceleration-change thresholds are illustrative |
+| Soil analog output | Yes, GPIO34 | Dry/wet mapping must be calibrated |
+| Rain analog output | Yes, GPIO35 | Active direction and wet threshold must be calibrated |
+| LED | Yes, GPIO26 | Confirm pin and use series resistor |
+| Active buzzer | Yes, GPIO25 | Confirm polarity/current; a driver may be needed |
+| Dedicated digital vibration module | No | Pin and output polarity have not been confirmed |
 
-### SH1106 128×64 OLED
-The SH1106 display is a compact graphical OLED module used to show:
-- sensor readings
-- system status
-- warnings or alert states
-- basic operational information
+## I²C
 
-The OLED has been tested independently. The MPU6050 has also been tested independently. Successful simultaneous operation on the shared I²C bus has not yet been verified; combined-bus debugging is in progress.
+The sketches initialize I²C with SDA GPIO21 and SCL GPIO22. The MPU6050 is requested at address 0x68. The OLED and MPU6050 have each been reported as working individually; simultaneous operation should be checked with the [I²C scanner](../tests/05_i2c_scanner/i2c_scanner.ino) and combined test before treating the bus as verified.
 
-Known current I²C configuration for the test setup:
-- SDA: GPIO21
-- SCL: GPIO22
+## Electrical caution
 
-## Motion sensing
+ESP32 GPIO/ADC pins must not receive signals above 3.3 V. Use a common ground, match module voltage requirements, add an LED series resistor, and use a transistor/driver if the buzzer current is too high for a GPIO.
 
-### MPU6050
-The MPU6050 is used for motion-related measurements, including:
-- acceleration
-- orientation changes
-- tilt-related movement
-- changes in motion that may be useful to prototype vibration detection
-
-The intended shared I²C connections are:
-- SDA: GPIO21
-- SCL: GPIO22
-
-The standalone MPU6050 test has produced readings, but detection in the combined OLED + MPU6050 sketch is still being debugged. Do not interpret the combined bus as verified yet.
-
-## Environmental sensing
-
-### Soil moisture sensor
-A soil moisture sensor is used to estimate relative soil moisture. Increased moisture can be a relevant environmental indicator, but the final thresholds and calibration remain unverified.
-
-### Rain sensor
-The rain sensor is intended to detect rainfall-related wetness. Its final interface and calibration details are not yet finalized.
-
-### Vibration sensor
-The vibration sensor is intended to detect physical movement or vibration events. Its final integration and electrical interface remain pending.
-
-## Alert hardware
-
-### LEDs
-LEDs are intended as visual indicators for prototype status or threshold-triggered warnings. The final arrangement and control logic are still under development.
-
-### Buzzer
-The buzzer is intended to provide an audible alert when a configured condition is detected. Its final alert logic remains under development.
-
-## Notes on wiring and final assignments
-
-This repository intentionally avoids inventing final pin assignments for all sensors.
-
-- Intended shared I²C pins for OLED and MPU6050: SDA GPIO21, SCL GPIO22
-- Independent OLED and MPU6050 tests have been performed
-- Successful simultaneous OLED + MPU6050 operation is not yet verified
-- Remaining sensor pin assignments are not finalized
-- Full circuit integration is still pending
-
-## Summary
-
-The hardware is intentionally simple and low-cost, with the ESP32 acting as the center of the design. The current implementation is a prototype-level experiment rather than a fully integrated system.
-
-For the full project context, see:
-- [Project overview](project-overview.md)
-- [Working principle](working-principle.md)
-- [Wiring and circuit notes](wiring-and-circuit.md)
-- [Testing status](testing-results.md)
+See [wiring and calibration](../hardware/WIRING.md), the [provisional diagram](../hardware/LANDGUARD-provisional-wiring.svg), and [test instructions](../tests/README.md).

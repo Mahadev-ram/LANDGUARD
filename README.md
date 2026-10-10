@@ -2,9 +2,17 @@
 
 **Low-cost ESP32 landslide-monitoring educational prototype** using environmental readings, an MPU6050 motion sensor, an OLED display, an LED, and a buzzer.
 
+## Prototype photo
+
 ![LANDGUARD prototype on a model slope](media/prototype-overview.jpg)
 
-[View the supplied demo video](media/LANDGUARD-demo.mp4)
+[Open the prototype photo directly](media/prototype-overview.jpg)
+
+## Demo video
+
+[▶ Open or download the LANDGUARD demo video (MP4)](media/LANDGUARD-demo.mp4)
+
+The photo and video are separate files in the [media folder](media/README.md). The repository video is a compressed preview to keep the Git repository lightweight.
 
 > **Safety and scope:** LANDGUARD is a bench/model-scale educational prototype, not a certified or field-validated landslide early-warning system. Thresholds are illustrative until calibrated. Never use this prototype as the basis for evacuation or other safety-critical decisions.
 
@@ -101,6 +109,7 @@ LANDGUARD/
 │   ├── LANDGUARD-provisional-wiring.svg
 │   └── WIRING.md
 ├── media/
+│   ├── README.md
 │   ├── prototype-overview.jpg
 │   └── LANDGUARD-demo.mp4
 ├── src/landguard_full/landguard_full.ino

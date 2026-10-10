@@ -1,1 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="#fff"/><text x="600" y="42" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="#123b4a">LANDGUARD — PROVISIONAL WIRING DIAGRAM</text><text x="600" y="72" text-anchor="middle" font-family="Arial" font-size="15" fill="#a33">Confirm every pin against the assembled hardware before powering</text><rect x="430" y="220" width="340" height="300" rx="18" fill="#d9e8ee" stroke="#164b5a" stroke-width="3"/><text x="600" y="260" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold">ESP32 DevKit</text><g font-family="Arial" font-size="18" fill="#123b4a"><text x="455" y="310">GPIO21 — SDA</text><text x="455" y="345">GPIO22 — SCL</text><text x="455" y="380">GPIO34 — Soil AO</text><text x="455" y="415">GPIO35 — Rain AO</text><text x="455" y="450">GPIO26 — LED</text><text x="455" y="485">GPIO25 — Buzzer</text></g><g fill="#f3f7f8" stroke="#26758a" stroke-width="2"><rect x="50" y="150" width="250" height="100" rx="10"/><rect x="50" y="300" width="250" height="100" rx="10"/><rect x="50" y="450" width="250" height="100" rx="10"/><rect x="880" y="150" width="250" height="100" rx="10"/><rect x="880" y="300" width="250" height="100" rx="10"/><rect x="880" y="450" width="250" height="100" rx="10"/></g><g font-family="Arial" font-size="18" text-anchor="middle" fill="#123b4a"><text x="175" y="190">SH1106 OLED</text><text x="175" y="220">SDA 21 / SCL 22</text><text x="175" y="340">MPU6050</text><text x="175" y="370">SDA 21 / SCL 22</text><text x="175" y="490">Soil moisture</text><text x="175" y="520">AO → GPIO34</text><text x="1005" y="190">Rain module</text><text x="1005" y="220">AO → GPIO35</text><text x="1005" y="340">LED + 220 Ω</text><text x="1005" y="370">GPIO26 → resistor → LED</text><text x="1005" y="490">Active buzzer</text><text x="1005" y="520">Signal → GPIO25</text></g><g stroke="#26758a" stroke-width="3" fill="none"><path d="M300 200 H360 V310 H430"/><path d="M300 350 H380 V345 H430"/><path d="M300 500 H390 V380 H430"/><path d="M770 415 H820 V200 H880"/><path d="M770 450 H830 V350 H880"/><path d="M770 485 H850 V500 H880"/></g><rect x="80" y="610" width="1040" height="90" rx="10" fill="#fff5df" stroke="#c58b2a" stroke-width="2"/><text x="100" y="640" font-family="Arial" font-size="17" font-weight="bold" fill="#7b5010">Power / ground notes</text><text x="100" y="668" font-family="Arial" font-size="16" fill="#7b5010">Common GND. Follow each module's voltage specification; ESP32 GPIO/ADC must never receive more than 3.3 V.</text><text x="100" y="690" font-family="Arial" font-size="16" fill="#7b5010">Vibration pinout is omitted because the exact connection was not confirmed.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780">
+<rect width="1200" height="780" fill="#fff"/>
+<text x="600" y="42" font-family="Arial,sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#143b4a">LANDGUARD — PROVISIONAL WIRING REFERENCE</text>
+<text x="600" y="72" font-family="Arial,sans-serif" font-size="17" text-anchor="middle" fill="#a03434">Confirm all pins against the physical build before powering</text>
+<rect x="430" y="185" width="340" height="385" rx="20" fill="#e2eef2" stroke="#1e6273" stroke-width="3"/>
+<text x="600" y="222" font-family="Arial,sans-serif" font-size="25" text-anchor="middle" font-weight="bold" fill="#143b4a">ESP32 DevKit</text>
+<g font-family="Arial,sans-serif" font-size="18" fill="#143b4a">
+<text x="458" y="268">GPIO21 — I2C SDA</text><text x="458" y="300">GPIO22 — I2C SCL</text>
+<text x="458" y="345">GPIO34 — Soil AO</text><text x="458" y="377">GPIO35 — Rain AO</text>
+<text x="458" y="422">GPIO27 — Vibration DO</text><text x="458" y="467">GPIO18 — LED</text>
+<text x="458" y="499">GPIO25 — Active buzzer</text><text x="458" y="540">3.3 V / GND rails*</text></g>
+<g fill="#f5f8fa" stroke="#1e6273" stroke-width="2">
+<rect x="45" y="135" width="300" height="115" rx="12"/><rect x="45" y="290" width="300" height="100" rx="12"/>
+<rect x="45" y="430" width="300" height="100" rx="12"/><rect x="855" y="135" width="300" height="100" rx="12"/>
+<rect x="855" y="280" width="300" height="100" rx="12"/><rect x="855" y="425" width="300" height="115" rx="12"/></g>
+<g font-family="Arial,sans-serif" text-anchor="middle" fill="#143b4a">
+<text x="195" y="170" font-size="21" font-weight="bold">SH1106 OLED</text><text x="195" y="201" font-size="17">SDA 21 · SCL 22</text><text x="195" y="226" font-size="17">Power per module</text>
+<text x="195" y="328" font-size="21" font-weight="bold">MPU6050</text><text x="195" y="360" font-size="17">SDA 21 · SCL 22</text>
+<text x="195" y="468" font-size="21" font-weight="bold">Soil-moisture module</text><text x="195" y="500" font-size="17">AO 34 · DO unused</text>
+<text x="1005" y="172" font-size="21" font-weight="bold">Rain module</text><text x="1005" y="204" font-size="17">AO 35</text>
+<text x="1005" y="318" font-size="21" font-weight="bold">Vibration module</text><text x="1005" y="350" font-size="17">DO 27 (polarity TBD)</text>
+<text x="1005" y="461" font-size="21" font-weight="bold">LED + active buzzer</text><text x="1005" y="491" font-size="17">LED 18 + resistor</text><text x="1005" y="516" font-size="17">Buzzer signal 25</text></g>
+<g stroke="#24788b" stroke-width="3" fill="none">
+<path d="M345 192 H390 V268 H430"/><path d="M345 340 H405 V300 H430"/><path d="M345 480 H400 V345 H430"/>
+<path d="M770 377 H810 V185 H855"/><path d="M770 422 H820 V330 H855"/><path d="M770 467 H830 V480 H855"/></g>
+<rect x="55" y="610" width="1090" height="112" rx="12" fill="#fff5df" stroke="#c58b2a" stroke-width="2"/>
+<text x="80" y="642" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#80550d">Power and safety</text>
+<text x="80" y="672" font-family="Arial,sans-serif" font-size="17" fill="#80550d">*Common GND. Follow each module's supply rating. ESP32 GPIO/ADC inputs must stay at or below 3.3 V.</text>
+<text x="80" y="699" font-family="Arial,sans-serif" font-size="17" fill="#80550d">Use an LED series resistor. Add a transistor/driver if buzzer current exceeds safe GPIO limits.</text>
+</svg>

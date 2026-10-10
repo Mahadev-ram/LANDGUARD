@@ -1,0 +1,29 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+build/
+dist/
+*.bin
+*.elf
+*.hex
+*.map
+*.log
+*.tmp
+
+# PlatformIO / Arduino output
+.pio/
+.pioenvs/
+.piolibdeps/
+*.code-workspace
+
+# Local environment
+.env
+.env.*

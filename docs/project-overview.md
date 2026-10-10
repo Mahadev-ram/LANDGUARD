@@ -2,15 +2,15 @@
 
 ## Purpose
 
-LANDGUARD is a low-cost ESP32 prototype for experimenting with soil-moisture, rain, tilt/motion, and alert outputs on a small slope model. It combines sensor readings with a local OLED status display and a buzzer/LED output.
+LANDGUARD is a low-cost ESP32 prototype for experimenting with soil-moisture, rain, tilt/motion, and alert outputs on a small slope model. Sensor readings are presented on an OLED display, with an LED and buzzer intended to make changes in the prototype's state visible and audible.
 
-It is an educational prototype, not a certified early-warning system or a field-validated landslide prediction solution.
+It is an educational prototype, not a certified or field-validated landslide early-warning system.
 
 ## Current implementation
 
-The repository contains an integrated sketch for the ESP32, SH1106 OLED, MPU6050, soil/rain analog inputs, LED, and active buzzer. It also contains standalone sensor/output tests and an I²C scanner.
+The repository contains an integrated sketch for the ESP32, SH1106 OLED, MPU6050, soil/rain analog inputs, a digital vibration input, an LED, and an active buzzer. Separate sketches are included for the MPU6050, OLED integration, analog inputs, LED/buzzer outputs, and I²C scanning.
 
-The current code implements three simplified internal states: SAFE, WARNING, and DANGER. It uses a change-in-acceleration value from the MPU6050 as a rough motion/vibration proxy. The separate digital vibration sensor mentioned in the project concept is not yet integrated into the main sketch. The report's four-state SAFE/WATCH/WARNING/CRITICAL design is therefore not implemented exactly.
+The integrated sketch implements four simplified software states: **SAFE, WATCH, WARNING, and CRITICAL**. These are demonstration rules based on provisional sensor thresholds, not a geotechnically validated risk model. The MPU6050 acceleration-change magnitude is only a rough motion proxy.
 
 ## Hardware references
 
@@ -21,10 +21,10 @@ The current code implements three simplified internal states: SAFE, WARNING, and
 
 ## Development and validation status
 
-The team previously reported standalone OLED and MPU6050 tests as working. The supplied prototype image and demo video document the physical bench/model setup. They do not establish that the integrated sketch, complete I²C bus, thresholds, or alert outputs have been fully validated.
+The team previously reported that the OLED and MPU6050 worked in separate standalone tests. The supplied prototype photo and compact demonstration video document the physical bench/model setup. They do not prove that the shared I²C bus, every sensor threshold, or the LED/buzzer behavior has passed full integration testing.
 
-Remaining validation includes checking the real pin map, compiling and uploading the integrated sketch, testing each output, measuring raw soil/rain readings under controlled conditions, and documenting repeatable calibration results.
+The pin map and thresholds must be checked against the actual circuit. Remaining validation includes compiling/uploading the integrated sketch, checking the shared I²C bus, testing the output signals, and recording repeatable dry/wet and tilt/motion trials.
 
 ## Scope and safety
 
-The prototype is suitable for learning about embedded sensing, basic data presentation, and threshold-driven outputs. It must not be used for real-world evacuation or other safety decisions. Field validation with appropriate geotechnical expertise would be required before any operational hazard-monitoring claims could be made.
+The prototype is suitable for learning about embedded sensing, basic data presentation, and threshold-driven outputs. Do not use it as the basis for evacuation or other safety-critical decisions. Operational landslide-monitoring claims would require validated instruments, appropriate geotechnical modelling, and sustained field testing.

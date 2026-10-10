@@ -1,36 +1,34 @@
 # Limitations and future scope
 
-## Current prototype limitations
+## Current limitations
 
-LANDGUARD is a single-node bench/model-scale educational prototype. It is not a certified early-warning system, and it has not been field-validated.
+LANDGUARD is a single-node bench/model-scale educational prototype. It is not a certified warning system and has not been field-validated.
 
-- The integrated sketch uses provisional soil, rain, tilt, and acceleration-change thresholds.
-- Moisture percentage is an estimate derived from raw ADC values, not a calibrated volumetric water-content measurement.
-- The current motion/vibration feature is an MPU6050 acceleration-change proxy; the separate digital vibration module is not read by the integrated sketch.
-- The firmware uses three simplified states (SAFE, WARNING, DANGER), while the report's proposed design describes four states (SAFE, WATCH, WARNING, CRITICAL).
-- The integrated sketch and actual GPIO mapping must be checked against the real wiring and compiled/uploaded on the physical assembly.
-- An assembled prototype photo/video does not prove all sensor combinations, output behavior, or calibration.
-- Breadboard wiring and non-weatherproof sensors are unsuitable for unattended outdoor deployment.
+- The integrated sketch uses four simplified software states (SAFE, WATCH, WARNING, CRITICAL), not a validated geotechnical risk model.
+- Soil moisture is shown as a relative estimate derived from raw ADC readings, not calibrated volumetric water content.
+- Rain polarity and moisture thresholds must be tuned from measurements.
+- MPU6050 acceleration-change is a rough motion proxy, not a calibrated seismic/vibration measurement.
+- All GPIO assignments beyond the intended I²C wiring are provisional; confirm them against the assembled circuit.
+- Combined sensor operation and LED/buzzer response still require hardware testing.
+- The photo/video document the prototype appearance, but are not proof that all test cases passed.
+- Breadboard wiring and exposed modules are unsuitable for unattended outdoor deployment.
 
-## Engineering constraints
+## Technical and electrical constraints
 
-Sensor outputs can vary with supply, mounting, soil composition, corrosion, wiring, and electrical noise. Alert thresholds must be derived from repeated controlled observations. An active buzzer may require a transistor/driver depending on its current draw.
-
-ESP32 GPIO/ADC pins must not receive signals above 3.3 V. Follow each module's supply and wiring requirements, use a common ground, and use a series resistor with discrete LEDs.
+Sensor readings can vary with supply, installation, soil composition, corrosion, wiring and electrical noise. An active buzzer may require a transistor/driver depending on current draw. Use a common ground, follow each module's supply requirements, include an LED series resistor, and never apply signals above 3.3 V to ESP32 GPIO/ADC pins.
 
 ## Future improvements
 
-- Verify and publish a complete, pin-by-pin schematic from the assembled circuit.
-- Calibrate and document the sensor response using repeatable dry/wet and tilt tests.
-- Integrate the dedicated digital vibration sensor with its confirmed module pinout.
-- Align firmware's state machine with the four-state report proposal, if that remains a requirement.
+- Confirm and publish a complete pin-by-pin schematic from the actual assembled circuit.
+- Calibrate the sensors with repeated, recorded dry/wet and controlled tilt/motion trials.
+- Verify shared I²C operation and every LED/buzzer output pattern.
 - Improve power regulation, connectors, enclosure, and corrosion protection.
-- Add long-term logging, multi-node monitoring, and wireless telemetry only after the core sensor behavior is validated.
-- Conduct field trials with geotechnical expertise before considering any operational warning use.
+- Add logging or telemetry only after core sensing behavior is repeatable.
+- Conduct appropriate field trials with geotechnical expertise before considering any operational warning use.
 
 ## Safety statement
 
-Do not use this prototype as the sole basis for evacuation or other safety-critical decisions. Real-world landslide monitoring requires validated instrumentation, an appropriate geotechnical model, and sustained field evaluation.
+Do not use this prototype as the sole basis for evacuation or other safety-critical decisions. Real-world landslide monitoring requires validated instrumentation, appropriate geotechnical analysis, and sustained field evaluation.
 
 ## Related files
 

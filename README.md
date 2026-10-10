@@ -23,12 +23,18 @@
 | [MPU6050 test](tests/01_mpu6050_test/mpu6050_test.ino) | Check MPU initialization and accelerometer readings |
 | [MPU6050 + OLED test](tests/02_mpu6050_oled/mpu6050_oled.ino) | Test readings on the SH1106 display |
 | [Soil/rain raw-read test](tests/03_mpu_soil_rain_oled/mpu_soil_rain_oled.ino) | Inspect analog readings with OLED/MPU present |
-| [LED + buzzer test](tests/04_led_buzzer_test/led_buzzer_test.ino) | Exercise SAFE, WARNING, and DANGER output patterns |
+| [LED + buzzer test](tests/04_led_buzzer_test/led_buzzer_test.ino) | Exercise SAFE, WATCH, WARNING, and CRITICAL output patterns |
 | [I²C scanner](tests/05_i2c_scanner/i2c_scanner.ino) | Find connected I²C device addresses |
 | [Wiring diagram (SVG)](hardware/LANDGUARD-provisional-wiring.svg) | Provisional connection overview |
 | [Wiring and calibration notes](hardware/WIRING.md) | Assumptions, power limits, and calibration guidance |
 
 Each `.ino` file is a separate Arduino sketch. Start with the individual tests in the [test instructions](tests/README.md) before attempting the integrated sketch.
+
+## Wiring reference
+
+![Provisional LANDGUARD wiring diagram](hardware/LANDGUARD-provisional-wiring.svg)
+
+[Open SVG diagram](hardware/LANDGUARD-provisional-wiring.svg) · [Wiring and calibration notes](hardware/WIRING.md)
 
 ## Hardware and provisional pin map
 
@@ -37,11 +43,12 @@ Each `.ino` file is a separate Arduino sketch. Start with the individual tests i
 | SH1106 OLED and MPU6050 | I²C SDA 21, SCL 22; MPU address expected at 0x68 |
 | Soil moisture analog output | GPIO34 |
 | Rain sensor analog output | GPIO35 |
-| Status LED | GPIO26 through a series resistor (e.g. 220 Ω) |
+| Digital vibration output | GPIO27 (active-low assumption) |
+| Status LED | GPIO18 through a series resistor (e.g. 220–330 Ω) |
 | Active buzzer signal | GPIO25 |
-| Dedicated digital vibration module | Not currently integrated in the main sketch |
+| Active buzzer/driver signal | GPIO25 (provisional) |
 
-**Verify the table against your actual wiring before powering or uploading.** GPIO34/35 and GPIO26/25 are assumed by the firmware but have not been confirmed from a verified netlist. All grounds must be common; ESP32 GPIO/ADC inputs must not receive signals above 3.3 V. Use a driver if the buzzer current exceeds safe GPIO output limits.
+**Verify the table against your actual wiring before powering or uploading.** GPIO34/35 and GPIO27/18/25 are provisional; compare them with actual wiring before using the sketch. All grounds must be common; ESP32 GPIO/ADC inputs must not receive signals above 3.3 V. Use a driver if the buzzer current exceeds safe GPIO output limits.
 
 ## Setup
 
@@ -55,13 +62,14 @@ The output test assumes an active-high LED and active buzzer. A passive piezo bu
 
 ## Current alert logic
 
-The integrated sketch has three simplified states:
+The integrated sketch has four simplified states:
 
 - **SAFE:** LED and buzzer off.
-- **WARNING:** LED on with short periodic buzzer chirps.
-- **DANGER:** LED on with faster repeated buzzer pulses.
+- **WATCH:** slow LED pulse; buzzer off.
+- **WARNING:** steady LED with a short periodic chirp.
+- **CRITICAL:** faster repeated LED flashes and buzzer pulses.
 
-The project report describes a four-state concept (SAFE/WATCH/WARNING/CRITICAL). The current code does **not** implement that exact four-state scheme. The acceleration-change value is an MPU6050-based proxy; the separate digital vibration sensor is not wired into the integrated sketch yet.
+This is prototype logic, not a validated geotechnical risk model. Acceleration-change is a rough MPU6050-based motion proxy, and the digital vibration input is provisional.
 
 ## Project documentation
 

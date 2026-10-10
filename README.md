@@ -67,12 +67,24 @@ The exact threshold values, risk logic, and final firmware remain pending until 
 
 The project is currently in an early hardware and documentation stage. Individual modules are being evaluated before final system integration. Hardware integration and testing are still underway, and the final firmware remains pending.
 
-The repository currently focuses on:
-- documentation
-- project structure
-- hardware context
-- testing orientation
-- prototype constraints and future improvements
+## Firmware and hardware files
+
+- [Integrated prototype sketch](src/landguard_full/landguard_full.ino) — ESP32 + SH1106 + MPU6050 + analog soil/rain inputs + LED + active buzzer. Thresholds are demonstration values and must be calibrated.
+- [Standalone MPU6050 test](tests/01_mpu6050_test/mpu6050_test.ino)
+- [MPU6050 + OLED test](tests/02_mpu6050_oled/mpu6050_oled.ino)
+- [MPU6050 + OLED + soil/rain raw-read test](tests/03_mpu_soil_rain_oled/mpu_soil_rain_oled.ino)
+- [Provisional wiring diagram](hardware/LANDGUARD-provisional-wiring.svg)
+- [Wiring and calibration notes](hardware/WIRING.md)
+
+The integrated sketch includes an LED status output and active-buzzer patterns: SAFE = off, WARNING = short chirps, DANGER = faster repeated alarm. It uses three simplified states and does not implement the four states described in the report. Confirm wiring, compile, and test on the actual hardware before relying on the sketch.
+
+## Demonstration video and prototype photo
+
+The submitted prototype photo and video should be added to the repository's `media/` folder or linked from the final submission materials. The video demonstrates the current physical build; it does not by itself verify every behavior implemented in the integrated sketch.
+
+## Current status
+
+Firmware and provisional wiring references have been added for review. The integrated sketch has not been confirmed as compiled or tested on the complete physical assembly. Individual sensor readings, combined I²C operation, buzzer/LED alert timing, analog thresholds, and final pin assignments must be verified on hardware.
 
 ## Repository structure
 

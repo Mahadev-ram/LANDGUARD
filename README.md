@@ -88,7 +88,7 @@ Firmware and provisional wiring references have been added for review. The integ
 
 ## Repository structure
 
-The following tree reflects files currently present in the repository. The integrated firmware directory and test sketches will be added when the corresponding code is ready to commit.
+The following tree reflects files currently present in the repository. The integrated firmware and test sketches are present. The integrated sketch and provisional diagram still require compile and physical-hardware verification.
 
 ```text
 LANDGUARD/
@@ -140,4 +140,4 @@ See [LICENSE](LICENSE) for details.
 
 ## Notes
 
-This repository is intentionally conservative about claims. Hardware integration, calibration, and firmware implementation are still in progress. No final sensor pin assignments or successful field-ready results are documented here beyond the known current setup details.
+This repository is intentionally conservative about claims. Hardware integration, calibration, and firmware implementation are still in progress. GPIO34/35 for analog inputs and GPIO26/25 for LED/buzzer are assumptions in the current sketch; verify them against actual wiring before using it. The integrated code uses three simplified states and provisional thresholds.

@@ -1,61 +1,43 @@
 # Limitations and future scope
 
-## Current limitations
+## Current prototype limitations
 
-LANDGUARD is an early-stage prototype and has several important limitations:
+LANDGUARD is a single-node bench/model-scale educational prototype. It is not a certified early-warning system, and it has not been field-validated.
 
-- It is not a certified early-warning system.
-- It is not validated for real-world field deployment.
-- Sensor thresholds are not yet confirmed.
-- Hardware integration is still in progress.
-- Final firmware is pending.
-- The system has no proven calibration or long-term stability.
-- The project should be considered educational and experimental.
+- The integrated sketch uses provisional soil, rain, tilt, and acceleration-change thresholds.
+- Moisture percentage is an estimate derived from raw ADC values, not a calibrated volumetric water-content measurement.
+- The current motion/vibration feature is an MPU6050 acceleration-change proxy; the separate digital vibration module is not read by the integrated sketch.
+- The firmware uses three simplified states (SAFE, WARNING, DANGER), while the report's proposed design describes four states (SAFE, WATCH, WARNING, CRITICAL).
+- The integrated sketch and actual GPIO mapping must be checked against the real wiring and compiled/uploaded on the physical assembly.
+- An assembled prototype photo/video does not prove all sensor combinations, output behavior, or calibration.
+- Breadboard wiring and non-weatherproof sensors are unsuitable for unattended outdoor deployment.
 
-## Technical constraints
+## Engineering constraints
 
-The project is intentionally low-cost, which makes it accessible, but that also introduces practical trade-offs:
-- sensor accuracy may vary
-- environmental noise can affect measurements
-- wiring and breadboard arrangements can be fragile
-- power supply conditions may affect stability
-- local calibration will be necessary for useful interpretation
+Sensor outputs can vary with supply, mounting, soil composition, corrosion, wiring, and electrical noise. Alert thresholds must be derived from repeated controlled observations. An active buzzer may require a transistor/driver depending on its current draw.
 
-## Operational caution
-
-A prototype such as this should not be used as the sole basis for safety-critical decisions. It is best viewed as a learning platform and a demonstrator for embedded sensing and basic warning logic.
+ESP32 GPIO/ADC pins must not receive signals above 3.3 V. Follow each module's supply and wiring requirements, use a common ground, and use a series resistor with discrete LEDs.
 
 ## Future improvements
 
-Potential future improvements include:
+- Verify and publish a complete, pin-by-pin schematic from the assembled circuit.
+- Calibrate and document the sensor response using repeatable dry/wet and tilt tests.
+- Integrate the dedicated digital vibration sensor with its confirmed module pinout.
+- Align firmware's state machine with the four-state report proposal, if that remains a requirement.
+- Improve power regulation, connectors, enclosure, and corrosion protection.
+- Add long-term logging, multi-node monitoring, and wireless telemetry only after the core sensor behavior is validated.
+- Conduct field trials with geotechnical expertise before considering any operational warning use.
 
-- more robust enclosure design
-- better power regulation and filtering
-- more reliable PCB-based layout
-- sensor calibration routines
-- improved threshold logic
-- data logging to local storage or remote dashboards
-- wireless communication for remote alerts
-- environmental packaging for outdoor conditions
-- stronger display and interface design
-- remote monitoring or notification support
-- integration with additional sensors for better situational context
+## Safety statement
 
-## Research and learning value
+Do not use this prototype as the sole basis for evacuation or other safety-critical decisions. Real-world landslide monitoring requires validated instrumentation, an appropriate geotechnical model, and sustained field evaluation.
 
-Despite current limits, the project has educational value:
-- it demonstrates sensor integration with an ESP32
-- it introduces motion and environmental sensing concepts
-- it supports learning about low-cost monitoring systems
-- it provides a foundation for future prototype iterations
+## Related files
 
-## Summary
-
-LANDGUARD is a starting point for a low-cost landslide monitoring concept. With proper engineering work, calibration, and field testing, it could evolve into a more capable monitoring system. At the current stage, however, it remains a prototype under development and must be treated as such.
-
-## Related documents
-
-- [Project overview](project-overview.md)
+- [Main README](../README.md)
 - [Hardware components](components.md)
 - [Working principle](working-principle.md)
-- [Testing status and results](testing-results.md)
+- [Test status](testing-results.md)
+- [Wiring and calibration](../hardware/WIRING.md)
+- [Provisional wiring diagram](../hardware/LANDGUARD-provisional-wiring.svg)
+- [Test guide](../tests/README.md)

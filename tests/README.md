@@ -1,43 +1,29 @@
-# Tests
+# Hardware test sketches
 
-This folder is for isolated hardware test sketches and test notes for the LANDGUARD prototype.
+Upload **one sketch at a time** using Arduino IDE. Use the ESP32 board profile that matches your board and set Serial Monitor to **115200 baud**.
 
-## Standalone tests
+## Recommended test order
 
-The following modules have been tested independently:
-- **SH1106 OLED:** standalone display output was observed.
-- **MPU6050:** standalone initialization and sensor readings were observed.
+1. [MPU6050 standalone test](01_mpu6050_test/mpu6050_test.ino) — confirms initialization and prints accelerometer readings.
+2. [MPU6050 + OLED test](02_mpu6050_oled/mpu6050_oled.ino) — checks the sensor and SH1106 display on I²C.
+3. [Soil/rain analog test](03_mpu_soil_rain_oled/mpu_soil_rain_oled.ino) — shows raw AO values for the soil and rain modules.
+4. [LED + buzzer test](04_led_buzzer_test/led_buzzer_test.ino) — cycles SAFE (both off), WARNING (LED + short chirps), and DANGER (LED + faster pulses).
+5. [I²C scanner](05_i2c_scanner/i2c_scanner.ino) — lists devices responding on SDA GPIO21 / SCL GPIO22.
+6. [Integrated sketch](../src/landguard_full/landguard_full.ino) — attempt only after checking individual modules and wiring.
 
-The corresponding sketches still need to be committed to this repository so others can reproduce the tests. Until the sketches are added, this README documents the test status but does not itself provide executable tests.
+## LED and buzzer connections for the output test
 
-## Current testing focus
+| Component | Pin used by test | Connection note |
+|---|---|---|
+| LED | GPIO26 | GPIO → series resistor (e.g. 220 Ω) → LED anode; LED cathode → GND |
+| Active buzzer | GPIO25 | Signal → GPIO25 and GND → common GND; use a transistor/driver if needed |
 
-- resolve the combined OLED + MPU6050 I²C issue
-- add the standalone OLED and MPU6050 sketches
-- validate soil moisture, rain, and vibration sensor behavior independently
-- verify LED and buzzer response
-- check I²C bus integrity and power stability
-- integrate and test the complete system incrementally
+These are assumptions used by the sketches, not a verified map for the pictured wiring. Check actual module pin labels and current requirements before connecting power. The output test assumes active-high devices; passive buzzers may need tone/PWM.
 
-## Test reporting
+## Required libraries
 
-For each test, record:
-- hardware and wiring used
-- sketch and library versions where relevant
-- expected behavior
-- observed output
-- pass/fail status and any issues
-- calibration method, if applicable
+The MPU6050/OLED sketches require **Adafruit MPU6050**, **Adafruit Unified Sensor**, **Adafruit BusIO**, and **U8g2**. The LED/buzzer output test and I²C scanner use built-in Arduino/ESP32 APIs only.
 
-Do not record a test as passed unless the behavior was actually observed. Raw readings alone do not establish calibrated sensor performance.
+## Recording results
 
-## Status
-
-Hardware integration and testing are still in progress. The final firmware, calibrated thresholds, and complete system behavior remain unverified.
-
-## Related documentation
-
-- [Project overview](../docs/project-overview.md)
-- [Hardware components](../docs/components.md)
-- [Wiring and circuit notes](../docs/wiring-and-circuit.md)
-- [Testing status and results](../docs/testing-results.md)
+For each test, capture the wiring, observed Serial Monitor output or display, and pass/fail result. Only mark a test passed after observing it on the physical circuit. A source file in the repository is not evidence that it has been successfully uploaded or hardware-tested. The integrated thresholds are demonstration values and require calibration.

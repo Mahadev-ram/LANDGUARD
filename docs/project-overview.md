@@ -2,71 +2,29 @@
 
 ## Purpose
 
-LANDGUARD is a low-cost ESP32-based prototype designed to monitor several indicators that may help detect conditions related to landslide risk. The project combines environmental sensing and motion detection with an embedded system that can display data and raise alerts.
+LANDGUARD is a low-cost ESP32 prototype for experimenting with soil-moisture, rain, tilt/motion, and alert outputs on a small slope model. It combines sensor readings with a local OLED status display and a buzzer/LED output.
 
-The goal is not to create a certified monitoring platform, but to provide a practical learning prototype for exploring how low-cost embedded electronics can be used to observe terrain-related risk indicators.
+It is an educational prototype, not a certified early-warning system or a field-validated landslide prediction solution.
 
-## Problem addressed
+## Current implementation
 
-Landslides often develop from conditions that include:
-- saturation of the soil
-- persistent rainfall
-- slope instability
-- ground vibration or sudden displacement
-- changes in local terrain orientation
+The repository contains an integrated sketch for the ESP32, SH1106 OLED, MPU6050, soil/rain analog inputs, LED, and active buzzer. It also contains standalone sensor/output tests and an I²C scanner.
 
-A low-cost system can help researchers, makers, and students examine sensor combinations and alert logic in a controlled environment before investing in more advanced or field-rated monitoring systems.
+The current code implements three simplified internal states: SAFE, WARNING, and DANGER. It uses a change-in-acceleration value from the MPU6050 as a rough motion/vibration proxy. The separate digital vibration sensor mentioned in the project concept is not yet integrated into the main sketch. The report's four-state SAFE/WATCH/WARNING/CRITICAL design is therefore not implemented exactly.
 
-## Objectives
+## Hardware references
 
-The project aims to:
-- observe soil moisture conditions
-- detect rain-related signals
-- monitor vibration and motion events
-- detect acceleration or tilt changes with an MPU6050
-- display system status and sensor readings
-- provide alerts using LEDs and a buzzer
-- keep the design low-cost and easy to prototype
+- [Component coverage](components.md)
+- [Wiring and calibration notes](../hardware/WIRING.md)
+- [Provisional wiring diagram](../hardware/LANDGUARD-provisional-wiring.svg)
+- [Test sequence](../tests/README.md)
 
-## System concept
+## Development and validation status
 
-The current concept is to use an ESP32 as the primary controller, with multiple sensors connected for data acquisition. Readings are intended to be processed locally and then displayed on a small OLED display, with passive or active alert behavior for abnormal conditions.
+The team previously reported standalone OLED and MPU6050 tests as working. The supplied prototype image and demo video document the physical bench/model setup. They do not establish that the integrated sketch, complete I²C bus, thresholds, or alert outputs have been fully validated.
 
-This prototype is expected to support:
-- simple sensor acquisition
-- basic display output
-- prototypes for threshold logic
-- future expansion to logging or telemetry
+Remaining validation includes checking the real pin map, compiling and uploading the integrated sketch, testing each output, measuring raw soil/rain readings under controlled conditions, and documenting repeatable calibration results.
 
-## Current stage of development
+## Scope and safety
 
-This project is in the early integration phase. The hardware modules are being reviewed individually before final integration. Some sensors may be tested separately, and the combined system still needs validation.
-
-Important:
-- hardware integration is still in progress
-- firmware is not yet finalized
-- thresholds are not yet verified
-- no field deployment claims are being made
-
-## Scope
-
-This repository documents the project at an early stage and focuses on:
-- project explanation
-- component documentation
-- working principle
-- hardware notes
-- testing context
-- known limitations
-- future development opportunities
-
-## Relationship to real-world monitoring
-
-LANDGUARD is a prototype and educational tool, not a certified early-warning system. It should not be treated as a replacement for professional landslide monitoring equipment, engineering judgment, or field-validated hazard analysis.
-
-## References within this repository
-
-- [Hardware components](components.md)
-- [Working principle](working-principle.md)
-- [Wiring and circuit notes](wiring-and-circuit.md)
-- [Testing status and results](testing-results.md)
-- [Limitations and future scope](limitations-and-future-scope.md)
+The prototype is suitable for learning about embedded sensing, basic data presentation, and threshold-driven outputs. It must not be used for real-world evacuation or other safety decisions. Field validation with appropriate geotechnical expertise would be required before any operational hazard-monitoring claims could be made.

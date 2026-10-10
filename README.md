@@ -1,143 +1,111 @@
 # LANDGUARD
 
-A low-cost ESP32-based prototype for landslide risk monitoring using motion, soil moisture, rainfall, and vibration sensors.
+**Low-cost ESP32 landslide-monitoring educational prototype** using environmental readings, an MPU6050 motion sensor, an OLED display, an LED, and a buzzer.
 
-## Project purpose
+![LANDGUARD prototype on a model slope](media/prototype-overview.jpg)
 
-LANDGUARD is an educational and prototype-level project intended to monitor environmental and ground-motion conditions that may be associated with landslide risk. The system is designed around an ESP32 microcontroller and a small set of sensors that can provide readings related to moisture, rainfall, vibration, and motion.
+[View the supplied demo video](media/LANDGUARD-demo.mp4)
 
-This project is not presented as a certified early-warning system or a field-validated landslide monitoring solution. It is intended as a learning-oriented prototype for experimenting with sensor integration, alerting, and data presentation.
+> **Safety and scope:** LANDGUARD is a bench/model-scale educational prototype, not a certified or field-validated landslide early-warning system. Thresholds are illustrative until calibrated. Never use this prototype as the basis for evacuation or other safety-critical decisions.
 
-## Problem statement
+## What is included
 
-Landslides can be influenced by a combination of factors, including:
-- increased soil saturation
-- prolonged rainfall
-- ground movement or slope instability
-- vibration or sudden shifts in terrain conditions
+- ESP32 firmware with SH1106 OLED, MPU6050, soil/rain analog inputs, LED and active-buzzer patterns.
+- Separate sketches for MPU6050, OLED integration, analog input checks, LED/buzzer outputs, and I²C scanning.
+- A provisional wiring diagram and calibration/safety notes.
+- Project documentation and supplied prototype media.
 
-A low-cost monitoring prototype can support research, learning, and testing of basic warning logic by combining several indicator channels into one embedded system.
+## Source code
 
-## Objectives
+| File | Purpose |
+|---|---|
+| [Integrated sketch](src/landguard_full/landguard_full.ino) | OLED + MPU6050 + soil/rain AO + LED + active buzzer |
+| [MPU6050 test](tests/01_mpu6050_test/mpu6050_test.ino) | Check MPU initialization and accelerometer readings |
+| [MPU6050 + OLED test](tests/02_mpu6050_oled/mpu6050_oled.ino) | Test readings on the SH1106 display |
+| [Soil/rain raw-read test](tests/03_mpu_soil_rain_oled/mpu_soil_rain_oled.ino) | Inspect analog readings with OLED/MPU present |
+| [LED + buzzer test](tests/04_led_buzzer_test/led_buzzer_test.ino) | Exercise SAFE, WARNING, and DANGER output patterns |
+| [I²C scanner](tests/05_i2c_scanner/i2c_scanner.ino) | Find connected I²C device addresses |
+| [Wiring diagram (SVG)](hardware/LANDGUARD-provisional-wiring.svg) | Provisional connection overview |
+| [Wiring and calibration notes](hardware/WIRING.md) | Assumptions, power limits, and calibration guidance |
 
-- Monitor soil moisture conditions
-- Detect rainfall-related changes
-- Detect vibration and movement-related events
-- Measure tilt or acceleration-related motion using an MPU6050
-- Display live sensor data on an OLED display
-- Trigger visual and audible alerts when configured thresholds are exceeded
-- Keep the system simple, low-cost, and suitable for prototyping
+Each `.ino` file is a separate Arduino sketch. Start with the individual tests in the [test instructions](tests/README.md) before attempting the integrated sketch.
 
-## Hardware components
+## Hardware and provisional pin map
 
-The current project documentation reflects the known hardware in the active prototype setup:
+| Function | GPIO / interface in the current integrated sketch |
+|---|---|
+| SH1106 OLED and MPU6050 | I²C SDA 21, SCL 22; MPU address expected at 0x68 |
+| Soil moisture analog output | GPIO34 |
+| Rain sensor analog output | GPIO35 |
+| Status LED | GPIO26 through a series resistor (e.g. 220 Ω) |
+| Active buzzer signal | GPIO25 |
+| Dedicated digital vibration module | Not currently integrated in the main sketch |
 
-- ESP32 development board
-- SH1106 128×64 OLED display
-- MPU6050 accelerometer and gyroscope module
-- Soil moisture sensor
-- Rain sensor
-- Vibration sensor
-- LEDs
-- Buzzer
-- Breadboard and connection wires
+**Verify the table against your actual wiring before powering or uploading.** GPIO34/35 and GPIO26/25 are assumed by the firmware but have not been confirmed from a verified netlist. All grounds must be common; ESP32 GPIO/ADC inputs must not receive signals above 3.3 V. Use a driver if the buzzer current exceeds safe GPIO output limits.
 
-The OLED and MPU6050 are intended to share the I²C bus in the current test setup:
-- SDA: GPIO21
-- SCL: GPIO22
+## Setup
 
-The OLED and MPU6050 have each been tested independently. Successful simultaneous operation has not yet been verified.
+1. Install the ESP32 board support package for Arduino IDE.
+2. Install **Adafruit MPU6050**, **Adafruit Unified Sensor**, **Adafruit BusIO**, and **U8g2** from Library Manager.
+3. Select the ESP32 board profile matching your hardware and open one sketch folder at a time.
+4. Set Serial Monitor to **115200 baud**.
+5. Follow the sequence in [tests/README.md](tests/README.md).
 
-No final pin assignments are claimed for the remaining sensors in this documentation.
+The output test assumes an active-high LED and active buzzer. A passive piezo buzzer may need a tone/PWM signal instead of a steady HIGH.
 
-## Proposed operation
+## Current alert logic
 
-The prototype is intended to:
-1. Read sensor values from the ESP32
-2. Process measurements locally
-3. Show status on the OLED display
-4. Detect abnormal or threshold-like conditions
-5. Trigger LED and buzzer alerts for visual and audible notification
+The integrated sketch has three simplified states:
 
-The exact threshold values, risk logic, and final firmware remain pending until hardware integration and calibration are complete.
+- **SAFE:** LED and buzzer off.
+- **WARNING:** LED on with short periodic buzzer chirps.
+- **DANGER:** LED on with faster repeated buzzer pulses.
 
-## Development status
+The project report describes a four-state concept (SAFE/WATCH/WARNING/CRITICAL). The current code does **not** implement that exact four-state scheme. The acceleration-change value is an MPU6050-based proxy; the separate digital vibration sensor is not wired into the integrated sketch yet.
 
-**Status: in progress**
+## Project documentation
 
-The project is currently in an early hardware and documentation stage. Individual modules are being evaluated before final system integration. Hardware integration and testing are still underway, and the final firmware remains pending.
+- [Project overview](docs/project-overview.md)
+- [Hardware components](docs/components.md)
+- [Working principle](docs/working-principle.md)
+- [Testing status and results](docs/testing-results.md)
+- [Limitations and future scope](docs/limitations-and-future-scope.md)
+- [Wiring and calibration](hardware/WIRING.md)
 
-## Firmware and hardware files
+## Validation status
 
-- [Integrated prototype sketch](src/landguard_full/landguard_full.ino) — ESP32 + SH1106 + MPU6050 + analog soil/rain inputs + LED + active buzzer. Thresholds are demonstration values and must be calibrated.
-- [Standalone MPU6050 test](tests/01_mpu6050_test/mpu6050_test.ino)
-- [MPU6050 + OLED test](tests/02_mpu6050_oled/mpu6050_oled.ino)
-- [MPU6050 + OLED + soil/rain raw-read test](tests/03_mpu_soil_rain_oled/mpu_soil_rain_oled.ino)
-- [Provisional wiring diagram](hardware/LANDGUARD-provisional-wiring.svg)
-- [Wiring and calibration notes](hardware/WIRING.md)
+The team previously reported that the OLED and MPU6050 worked in separate standalone tests. The supplied photo and video show the physical bench/model prototype. These do not prove that the combined I²C system, all sensor thresholds, or the newly added LED/buzzer behavior have been fully tested.
 
-The integrated sketch includes an LED status output and active-buzzer patterns: SAFE = off, WARNING = short chirps, DANGER = faster repeated alarm. It uses three simplified states and does not implement the four states described in the report. Confirm wiring, compile, and test on the actual hardware before relying on the sketch.
+The integrated firmware and pin map remain **unverified on the complete physical circuit**. Record real test observations and calibration data before marking any pending test as passed.
 
-## Demonstration video and prototype photo
-
-The submitted prototype photo and video should be added to the repository's `media/` folder or linked from the final submission materials. The video demonstrates the current physical build; it does not by itself verify every behavior implemented in the integrated sketch.
-
-## Current status
-
-Firmware and provisional wiring references have been added for review. The integrated sketch has not been confirmed as compiled or tested on the complete physical assembly. Individual sensor readings, combined I²C operation, buzzer/LED alert timing, analog thresholds, and final pin assignments must be verified on hardware.
-
-## Repository structure
-
-The following tree reflects files currently present in the repository. The integrated firmware directory and test sketches will be added when the corresponding code is ready to commit.
+## Repository layout
 
 ```text
 LANDGUARD/
 ├── README.md
 ├── LICENSE
-├── .gitignore
 ├── docs/
 │   ├── project-overview.md
 │   ├── components.md
 │   ├── working-principle.md
-│   ├── wiring-and-circuit.md
 │   ├── testing-results.md
 │   └── limitations-and-future-scope.md
-├── tests/
-│   └── README.md
 ├── hardware/
-│   └── README.md
-└── media/
+│   ├── LANDGUARD-provisional-wiring.svg
+│   └── WIRING.md
+├── media/
+│   ├── prototype-overview.jpg
+│   └── LANDGUARD-demo.mp4
+├── src/landguard_full/landguard_full.ino
+└── tests/
+    ├── 01_mpu6050_test/
+    ├── 02_mpu6050_oled/
+    ├── 03_mpu_soil_rain_oled/
+    ├── 04_led_buzzer_test/
+    ├── 05_i2c_scanner/
     └── README.md
 ```
 
-## Documentation
-
-- [Project overview](docs/project-overview.md)
-- [Hardware components](docs/components.md)
-- [Working principle](docs/working-principle.md)
-- [Wiring and circuit notes](docs/wiring-and-circuit.md)
-- [Testing status and results](docs/testing-results.md)
-- [Limitations and future scope](docs/limitations-and-future-scope.md)
-
-## Limitations
-
-LANDGUARD is an educational prototype, not a certified landslide early-warning system. It is intended for learning, experimentation, and proof-of-concept evaluation only.
-
-This project does not claim:
-- field validation
-- certified hazard monitoring accuracy
-- proven long-term reliability
-- production-ready deployment
-- final calibrated thresholds
-
-The system requires careful testing, sensor calibration, and hardware validation before it can be considered for real-world use.
-
 ## License
 
-This repository currently uses the MIT License. The license file in the root of the repository should be kept as-is unless project ownership or licensing terms are explicitly changed.
-
-See [LICENSE](LICENSE) for details.
-
-## Notes
-
-This repository is intentionally conservative about claims. Hardware integration, calibration, and firmware implementation are still in progress. No final sensor pin assignments or successful field-ready results are documented here beyond the known current setup details.
+Source code: MIT license. See [LICENSE](LICENSE).

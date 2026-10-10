@@ -2,53 +2,47 @@
 
 ## Current status
 
-Hardware integration and testing are still in progress.
+Hardware integration and testing are still in progress. The observations below describe module-level tests and the current integration attempt; they do not establish field reliability or landslide-prediction accuracy.
 
-This repository does not claim:
-- successful field validation
-- verified threshold values
-- calibrated sensor behavior
-- final working firmware
-- completed integrated system tests
+## Module-level and integration status
 
-## Known testing position
+| Test | Status | Observation |
+|---|---|---|
+| OLED standalone test | Passed | Display output was observed with the standalone sketch. |
+| MPU6050 standalone test | Passed | Sensor initialization and readings were observed with the standalone sketch. |
+| OLED + MPU6050 combined test | In progress | The combined sketch did not detect the MPU6050 successfully. |
+| Soil moisture sensor validation | Pending documentation | Raw readings have been observed during earlier debugging, but calibrated behavior is not yet established. |
+| Rain sensor validation | Pending documentation | Raw readings have been observed during earlier debugging, but calibrated behavior is not yet established. |
+| Vibration sensor validation | Pending | Repeatable behavior and thresholds have not been documented. |
+| LED and buzzer response | Pending | Complete alert behavior has not been verified. |
+| Full sensor integration | Pending | The integrated system has not been verified end to end. |
+| Threshold calibration | Pending | Thresholds have not been validated. |
+| Field validation | Not performed | No field-validation claim is made. |
 
-The project is currently in a prototype stage where:
-- module-level checks are being considered
-- hardware integration is being prepared
-- sensor behavior still requires validation
-- firmware is not finalized
-- combined alert logic is not yet proven
+## What remains unverified
 
-## What should be expected from this document
+The following are not yet established:
+- calibrated sensor thresholds
+- final integrated firmware
+- reliable simultaneous OLED and MPU6050 operation
+- complete alert behavior under defined test conditions
+- end-to-end system performance
+- field deployment suitability
 
-This repository documents the testing context, not completed test success. In other words, the project is being structured with realistic and careful documentation rather than invented performance claims.
+## Suggested next testing workflow
 
-## What is not documented here
-
-The following are intentionally omitted because they are not verified:
-- measured sensor values
-- successful calibration tables
-- final threshold settings
-- completed end-to-end prototype demonstration
-- field deployment evidence
-- certified or industry-standard test results
-
-## Suggested future testing workflow
-
-When the hardware is ready, the testing plan should include:
-1. Individual sensor validation
-2. Power stability checks
-3. I²C communication verification for OLED and MPU6050
-4. Sensor threshold review
-5. LED and buzzer operation
-6. Combined system behavior checks
-7. Repeated trials and documentation of observations
-8. Calibration and refinement before any field-oriented use
+1. Resolve shared I²C communication between the OLED and MPU6050.
+2. Keep the standalone test sketches in the repository so their results can be reproduced.
+3. Validate each remaining sensor independently and record the actual observations.
+4. Confirm power stability and wiring before integration.
+5. Verify LED and buzzer behavior using controlled test conditions.
+6. Integrate the sensors incrementally and document each change.
+7. Calibrate thresholds using repeated observations; do not present initial trial values as validated thresholds.
+8. Evaluate the prototype safely before considering any field-oriented use.
 
 ## Important caution
 
-LANDGUARD remains an educational prototype. It is not a certified early-warning system and must not be treated as validated monitoring hardware.
+LANDGUARD remains an educational prototype. It is not a certified early-warning system and must not be treated as validated monitoring hardware or as the sole basis for safety decisions.
 
 ## Related documents
 

@@ -42,9 +42,11 @@ The current project documentation reflects the known hardware in the active prot
 - Buzzer
 - Breadboard and connection wires
 
-The OLED and MPU6050 share the current I²C bus on:
+The OLED and MPU6050 are intended to share the I²C bus in the current test setup:
 - SDA: GPIO21
 - SCL: GPIO22
+
+The OLED and MPU6050 have each been tested independently. Successful simultaneous operation has not yet been verified.
 
 No final pin assignments are claimed for the remaining sensors in this documentation.
 
@@ -74,6 +76,8 @@ The repository currently focuses on:
 
 ## Repository structure
 
+The following tree reflects files currently present in the repository. The integrated firmware directory and test sketches will be added when the corresponding code is ready to commit.
+
 ```text
 LANDGUARD/
 ├── README.md
@@ -90,9 +94,8 @@ LANDGUARD/
 │   └── README.md
 ├── hardware/
 │   └── README.md
-├── media/
-│   └── README.md
-└── src/                 # final firmware pending
+└── media/
+    └── README.md
 ```
 
 ## Documentation
